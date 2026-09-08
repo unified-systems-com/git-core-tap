@@ -1,0 +1,6 @@
+git-core-tap
+Copyright 2026 Unified Systems
+
+The `git-commit` icon (tap_plugin/git_core/static/git_core/icons/git-commit.svg) is the Octicons
+`git-commit` glyph (https://primer.style/octicons), MIT License, Copyright (c) GitHub Inc.,
+recoloured to `currentColor`. The `git-ref` and `git-repository` glyphs are original.

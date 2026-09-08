@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Original glyph. A repository as an object store: a rounded container holding a short
+     commit chain — three commits joined by the parent line. Deliberately not a book, a folder or
+     any forge's mark: the neutral node belongs to no host. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24">
+  <title>Git Repository</title>
+  <rect x="2.75" y="3.75" width="18.5" height="16.5" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"/>
+  <path fill="none" stroke="currentColor" stroke-width="1.5" d="M7.5 12h9"/>
+  <circle cx="7" cy="12" r="1.8" fill="currentColor"/>
+  <circle cx="12" cy="12" r="1.8" fill="currentColor"/>
+  <circle cx="17" cy="12" r="1.8" fill="currentColor"/>
+</svg>

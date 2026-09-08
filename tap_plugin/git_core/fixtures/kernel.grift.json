@@ -1,0 +1,271 @@
+{
+  "metadata": {
+    "grift_version": "0"
+  },
+  "_reserved": {},
+  "batches": [
+    {
+      "batch_entity": {
+        "entity_id": "3f107e34-f9f2-5c8f-b40c-54a37035f88a",
+        "entity_type": "batch",
+        "name": "git_core kernel fixture v0.1.0",
+        "dimensions": {}
+      },
+      "batch_node": {
+        "source": "tap_plugin.git_core.fixtures.kernel",
+        "name": "git_core kernel fixture v0.1.0",
+        "description": "A synthetic non-forge repository populating the whole git_core vocabulary through git_core.identity alone (req-git-core-kernel-fixture): one repository on kernel.example, refs/heads/main, a lightweight tag v1, an annotated tag v2 with its own tag object, three commits; DECLARES_REF, RESOLVES_COMMIT and STORES_COMMIT for each. Not seeded by any product record; imported by the plugin's tests and by anyone proving a second source."
+      },
+      "nodes": [
+        {
+          "entity": {
+            "entity_id": "dede75d6-4ecf-56bc-acb7-4d82fa1f234f",
+            "entity_type": "git_core__git_repository",
+            "name": "kernel",
+            "dimensions": {}
+          },
+          "node": {
+            "forge": "kernel.example",
+            "stable_id": "kernel-1",
+            "name": "kernel",
+            "default_ref": "refs/heads/main",
+            "hash_algorithm": "sha1"
+          }
+        },
+        {
+          "entity": {
+            "entity_id": "6ef478fd-e67a-528a-8875-b6a2868f71a4",
+            "entity_type": "git_core__git_commit",
+            "name": "dd961af1574a",
+            "dimensions": {}
+          },
+          "node": {
+            "hash_algorithm": "sha1",
+            "oid": "dd961af1574a7d6a7f9340ca64854873943bae09",
+            "authored_date": "2026-01-01T09:00:00Z",
+            "committed_date": "2026-01-01T09:00:00Z",
+            "author_name": "Ada Kernel",
+            "author_email": "ada@kernel.example",
+            "committer_name": "Ada Kernel",
+            "committer_email": "ada@kernel.example"
+          }
+        },
+        {
+          "entity": {
+            "entity_id": "98022eb1-0fe5-5135-bca8-8681db9d07f5",
+            "entity_type": "git_core__git_commit",
+            "name": "2b8e07efb9f6",
+            "dimensions": {}
+          },
+          "node": {
+            "hash_algorithm": "sha1",
+            "oid": "2b8e07efb9f666c30eff95c93762bbd8af01dca2",
+            "authored_date": "2026-01-02T09:00:00Z",
+            "committed_date": "2026-01-02T09:00:00Z",
+            "author_name": "Ada Kernel",
+            "author_email": "ada@kernel.example",
+            "committer_name": "Ada Kernel",
+            "committer_email": "ada@kernel.example"
+          }
+        },
+        {
+          "entity": {
+            "entity_id": "2de4f80d-b2e2-51b5-81e9-3f118585055c",
+            "entity_type": "git_core__git_commit",
+            "name": "89907f0f4a27",
+            "dimensions": {}
+          },
+          "node": {
+            "hash_algorithm": "sha1",
+            "oid": "89907f0f4a2734da19e517934b637b7640140e5c",
+            "authored_date": "2026-01-03T09:00:00Z",
+            "committed_date": "2026-01-03T09:00:00Z",
+            "author_name": "Bo Kernel",
+            "author_email": "bo@kernel.example",
+            "committer_name": "Bo Kernel",
+            "committer_email": "bo@kernel.example"
+          }
+        },
+        {
+          "entity": {
+            "entity_id": "c4001c37-4ae0-57ed-8bca-6f1515265fb8",
+            "entity_type": "git_core__git_ref",
+            "name": "main",
+            "dimensions": {}
+          },
+          "node": {
+            "ref": "refs/heads/main",
+            "ref_type": "branch",
+            "name": "main",
+            "head_sha": "89907f0f4a2734da19e517934b637b7640140e5c",
+            "target_sha": "",
+            "target_type": "",
+            "is_default": true
+          }
+        },
+        {
+          "entity": {
+            "entity_id": "78514ddd-540a-50e9-835c-748bab7e4c8a",
+            "entity_type": "git_core__git_ref",
+            "name": "v1",
+            "dimensions": {}
+          },
+          "node": {
+            "ref": "refs/tags/v1",
+            "ref_type": "tag",
+            "name": "v1",
+            "head_sha": "2b8e07efb9f666c30eff95c93762bbd8af01dca2",
+            "target_sha": "",
+            "target_type": "",
+            "is_default": false
+          }
+        },
+        {
+          "entity": {
+            "entity_id": "b5f2595d-2c80-5b3c-8ea5-c94eae296cfe",
+            "entity_type": "git_core__git_ref",
+            "name": "v2",
+            "dimensions": {}
+          },
+          "node": {
+            "ref": "refs/tags/v2",
+            "ref_type": "tag",
+            "name": "v2",
+            "head_sha": "89907f0f4a2734da19e517934b637b7640140e5c",
+            "target_sha": "a45ea0e0d88bf1c7095719c199327aa5167c92e9",
+            "target_type": "tag",
+            "is_default": false
+          }
+        }
+      ],
+      "edges": [
+        {
+          "entity": {
+            "entity_id": "16e9a27d-4ea4-57b9-97c7-9d92d5c61466",
+            "entity_type": "edge",
+            "name": "kernel STORES_COMMIT dd961af1574a",
+            "dimensions": {}
+          },
+          "edge": {
+            "from_entity_id": "dede75d6-4ecf-56bc-acb7-4d82fa1f234f",
+            "to_entity_id": "6ef478fd-e67a-528a-8875-b6a2868f71a4",
+            "edge_type": "STORES_COMMIT__git_core",
+            "properties": {}
+          }
+        },
+        {
+          "entity": {
+            "entity_id": "eda4cc80-1d6c-5241-891e-f964a6579689",
+            "entity_type": "edge",
+            "name": "kernel STORES_COMMIT 2b8e07efb9f6",
+            "dimensions": {}
+          },
+          "edge": {
+            "from_entity_id": "dede75d6-4ecf-56bc-acb7-4d82fa1f234f",
+            "to_entity_id": "98022eb1-0fe5-5135-bca8-8681db9d07f5",
+            "edge_type": "STORES_COMMIT__git_core",
+            "properties": {}
+          }
+        },
+        {
+          "entity": {
+            "entity_id": "00354110-32f9-5d88-a674-b3b2d609d3bf",
+            "entity_type": "edge",
+            "name": "kernel STORES_COMMIT 89907f0f4a27",
+            "dimensions": {}
+          },
+          "edge": {
+            "from_entity_id": "dede75d6-4ecf-56bc-acb7-4d82fa1f234f",
+            "to_entity_id": "2de4f80d-b2e2-51b5-81e9-3f118585055c",
+            "edge_type": "STORES_COMMIT__git_core",
+            "properties": {}
+          }
+        },
+        {
+          "entity": {
+            "entity_id": "edfd4a0d-ce61-5ab0-8dee-6e7318ba9cde",
+            "entity_type": "edge",
+            "name": "kernel DECLARES_REF refs/heads/main",
+            "dimensions": {}
+          },
+          "edge": {
+            "from_entity_id": "dede75d6-4ecf-56bc-acb7-4d82fa1f234f",
+            "to_entity_id": "c4001c37-4ae0-57ed-8bca-6f1515265fb8",
+            "edge_type": "DECLARES_REF__git_core",
+            "properties": {}
+          }
+        },
+        {
+          "entity": {
+            "entity_id": "a14cd2f3-490c-5664-9c64-1dd1f0877089",
+            "entity_type": "edge",
+            "name": "refs/heads/main RESOLVES_COMMIT 89907f0f4a27",
+            "dimensions": {}
+          },
+          "edge": {
+            "from_entity_id": "c4001c37-4ae0-57ed-8bca-6f1515265fb8",
+            "to_entity_id": "2de4f80d-b2e2-51b5-81e9-3f118585055c",
+            "edge_type": "RESOLVES_COMMIT__git_core",
+            "properties": {}
+          }
+        },
+        {
+          "entity": {
+            "entity_id": "79e6ca25-6505-5012-b751-d4a881b3ce6c",
+            "entity_type": "edge",
+            "name": "kernel DECLARES_REF refs/tags/v1",
+            "dimensions": {}
+          },
+          "edge": {
+            "from_entity_id": "dede75d6-4ecf-56bc-acb7-4d82fa1f234f",
+            "to_entity_id": "78514ddd-540a-50e9-835c-748bab7e4c8a",
+            "edge_type": "DECLARES_REF__git_core",
+            "properties": {}
+          }
+        },
+        {
+          "entity": {
+            "entity_id": "f6c543cf-f0c6-58e0-a184-e0c52a7b66b2",
+            "entity_type": "edge",
+            "name": "refs/tags/v1 RESOLVES_COMMIT 2b8e07efb9f6",
+            "dimensions": {}
+          },
+          "edge": {
+            "from_entity_id": "78514ddd-540a-50e9-835c-748bab7e4c8a",
+            "to_entity_id": "98022eb1-0fe5-5135-bca8-8681db9d07f5",
+            "edge_type": "RESOLVES_COMMIT__git_core",
+            "properties": {}
+          }
+        },
+        {
+          "entity": {
+            "entity_id": "f65afcce-1880-526d-b681-af545ca2693b",
+            "entity_type": "edge",
+            "name": "kernel DECLARES_REF refs/tags/v2",
+            "dimensions": {}
+          },
+          "edge": {
+            "from_entity_id": "dede75d6-4ecf-56bc-acb7-4d82fa1f234f",
+            "to_entity_id": "b5f2595d-2c80-5b3c-8ea5-c94eae296cfe",
+            "edge_type": "DECLARES_REF__git_core",
+            "properties": {}
+          }
+        },
+        {
+          "entity": {
+            "entity_id": "802af9d7-7c5c-58a5-8bc1-2d2692af8218",
+            "entity_type": "edge",
+            "name": "refs/tags/v2 RESOLVES_COMMIT 89907f0f4a27",
+            "dimensions": {}
+          },
+          "edge": {
+            "from_entity_id": "b5f2595d-2c80-5b3c-8ea5-c94eae296cfe",
+            "to_entity_id": "2de4f80d-b2e2-51b5-81e9-3f118585055c",
+            "edge_type": "RESOLVES_COMMIT__git_core",
+            "properties": {}
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "slug": "STORES_COMMIT__git_core",
+  "name": "Stores Commit",
+  "description": "A repository's object store holds this commit — observed presence, never complete history: the edge is emitted for every commit a source observed in that repository, and its absence means unobserved, not absent. The membership half of the commit's global identity (the commit node itself belongs to no repository).",
+  "sources": [
+    "git_core__git_repository"
+  ],
+  "targets": [
+    "git_core__git_commit"
+  ],
+  "default_dimensions": {
+    "git.object": "relation"
+  }
+}

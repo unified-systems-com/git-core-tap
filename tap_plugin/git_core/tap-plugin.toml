@@ -1,0 +1,23 @@
+manifest_version = "0"
+plugin_version = "0.1.0"
+slug = "git_core"
+name = "Git Core"
+description = "The neutral Git vocabulary — repositories, refs and commits with identities any source can mint; forges observe it, never own it."
+
+# A substrate: depends on nothing above core. github_core depends on THIS (imports
+# tap_plugin.git_core.identity and targets these types from its edges).
+depends_on = []
+
+# Pure Python, no crypto, no native deps (spec-fips.md, req-tap-plugin-manifest-v0-fips).
+[fips]
+status = "compatible"
+
+[models]
+git_core__git_repository = "tap_plugin.git_core.models.git_repository.Repository"
+git_core__git_ref = "tap_plugin.git_core.models.git_ref.Ref"
+git_core__git_commit = "tap_plugin.git_core.models.git_commit.Commit"
+
+[edges]
+DECLARES_REF__git_core = "edges/DECLARES_REF.edge.json"
+RESOLVES_COMMIT__git_core = "edges/RESOLVES_COMMIT.edge.json"
+STORES_COMMIT__git_core = "edges/STORES_COMMIT.edge.json"

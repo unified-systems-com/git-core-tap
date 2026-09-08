@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "profile_kind": "dev_local",
+  "description": "git_core CI boot-and-test profile (req-plugin-extdev-repo-ci; consumed by tap's plugin-ci.yml boot-and-test job). A substrate with no dependencies: installs git_core EDITABLE from _external/git_core (the path plugin-ci.yml checks this repo out to inside the harness tree) and nothing else above core, then runs this package's shipped suite. No population: git_core declares no GRIFT bundle (the kernel fixture is imported by tests, never seeded) and fires no collector, so there are no steps and no required_secrets.",
+  "install": {
+    "plugins": [
+      {
+        "slug": "git_core",
+        "enabled": true,
+        "source": {
+          "type": "editable",
+          "path": "_external/git_core"
+        },
+        "note": "Package-mode (tap_plugin.git_core). THIS repo's HEAD, editable. Install-only: no seed, no collector."
+      }
+    ]
+  },
+  "population": {
+    "on_failure": "abort",
+    "steps": []
+  }
+}

@@ -1,0 +1,41 @@
+# git-core-tap — the neutral Git vocabulary: repositories, refs and commits with identities any
+# source can mint. Forges observe it (github_core emits it and depends on it); this package owns
+# it and imports no forge (spec-git_core-v0.md, github-core#76).
+#
+# Identity chain (req-tap-plugin-arch-identity, gate-enforced; <slug>-tap since 2026-08-26):
+#   slug             = "git_core"
+#   distribution     = "git-core-tap"
+#   import namespace = "tap_plugin.git_core"      (PEP 420; NO tap_plugin/__init__.py)
+#   entry-point key  = "git_core"
+[project]
+name = "git-core-tap"
+description = "TAP Git Core plugin — the neutral Git vocabulary: repositories, refs and commits with identities any source can mint; forges observe it, never own it."
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.14"
+dynamic = ["version"]
+# Tier-0: none. A substrate depends on nothing above core (req-tap-plugin-arch-dependencies).
+dependencies = []
+
+[project.entry-points."tap.plugins"]
+git_core = "tap_plugin.git_core.apps:GitCoreConfig"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3",
+    "pytest-django>=4.9",
+    "factory-boy>=3.3",
+]
+
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.version.raw-options]
+fallback_version = "0.0.0"
+
+[tool.hatch.build.targets.wheel]
+only-include = ["tap_plugin/git_core"]

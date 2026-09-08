@@ -1,0 +1,14 @@
+{
+  "slug": "DECLARES_REF__git_core",
+  "name": "Declares Ref",
+  "description": "A repository declares a named reference — a branch or a tag — in its refs namespace. Property-free: ref movement is field history on the ref's head_sha, not a property here. Moved from github_core's HAS_REF (github-core#76): the source is now the neutral repository, and the verb is the mechanical one (the structure validator rejects HAS_ as a state, not an action).",
+  "sources": [
+    "git_core__git_repository"
+  ],
+  "targets": [
+    "git_core__git_ref"
+  ],
+  "default_dimensions": {
+    "git.object": "relation"
+  }
+}

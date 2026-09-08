@@ -1,0 +1,23 @@
+# CI for git-core-tap — a thin caller of the reusable plugin admission gate in the core TAP repo
+# (.github/workflows/plugin-ci.yml, req-plugin-extdev-repo-ci). Both legs: conformance (the
+# Django-free structure gate) and boot-and-test, which stands git_core up alone on the core floor
+# (ci/nightly.boot.json) and runs this package's suite — the kernel fixture proves the vocabulary
+# populates with no forge installed.
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  tap:
+    uses: unified-systems-com/tap/.github/workflows/plugin-ci.yml@main
+    with:
+      plugin_slug: git_core
+      harness_ref: main
+      boot_profile: ci/nightly.boot.json

@@ -1,0 +1,14 @@
+{
+  "slug": "RESOLVES_COMMIT__git_core",
+  "name": "Resolves Commit",
+  "description": "A ref resolves to its PEELED commit — the branch head, or for an annotated tag the commit the tag object points at (the tag object itself stays a field on the ref: target_sha/target_type). Replaces github_core's POINTS_AT. Property-free; a moved ref re-derives the relation (shape G) and batch provenance dates every write.",
+  "sources": [
+    "git_core__git_ref"
+  ],
+  "targets": [
+    "git_core__git_commit"
+  ],
+  "default_dimensions": {
+    "git.object": "relation"
+  }
+}
