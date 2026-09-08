@@ -23,6 +23,18 @@ The key is `git.object`, in the `git.` namespace this plugin owns; effectively i
 - **Not declared-versus-executed.** The substrate is entirely declarations; there is nothing to partition.
 - **Not the ref kind.** Branch versus tag is the `ref_type` field on the ref, a property, not a partition.
 
+## Authoritative Source
+
+- **Source:** Git — the reference and object model (`git-check-ref-format`, `gitglossary`: ref, commit object, annotated tag object, peeling)
+- **Version:** Git 2.51 documentation (the object model has been stable since Git 1.x; SHA-256 object format per `gitformat-hash`)
+- **Retrieved:** 2026-09-08
+
+## Prior Art
+
+- unified-systems-com/tap-plugin-github-core#76 rev 2 (2026-09-08) — the extraction rulings: identities, observation semantics, shared-write rules, edge names.
+- `tap-plugin-github-core/specs/spec-github-core-vocabulary.md` — the concept rows this vocabulary was extracted from (`github_repository`, `git_ref`, `git_commit`, decision 2 on one ref type).
+- Codex review of #76 (2026-09-08, off-issue) — ship the three neutral nodes together; ref identity from repository identity + full path; commit-observation identity concrete; no `TARGETS_OBJECT`.
+
 ## Neutrality
 
 **Neutral by construction.** A synthetic non-forge source (the kernel fixture) stamps the same values; nothing in the key or its values would change for another host.
@@ -30,3 +42,10 @@ The key is `git.object`, in the `git.` namespace this plugin owns; effectively i
 ## Observability
 
 **Declared, never fetched**, applied at creation from type and edge-type defaults.
+
+## Values
+
+- `repository` — a `git_core__git_repository` row.
+- `ref` — a `git_core__git_ref` row.
+- `commit` — a `git_core__git_commit` row.
+- `relation` — every git_core edge (`DECLARES_REF`, `RESOLVES_COMMIT`, `STORES_COMMIT`).

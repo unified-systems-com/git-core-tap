@@ -124,7 +124,11 @@ class Commit(BaseModel):
             return
         conflicts: dict[str, list[str]] = {}
         for field in self.INTRINSIC_FIELDS:
-            held, incoming = stored[field], getattr(self, field)
+            model_field = self._meta.get_field(field)
+            # Coerce both sides through the field: an incoming ISO string and the stored aware
+            # datetime are the same fact, not a conflict (first live re-collection, 2026-09-08).
+            held = model_field.to_python(stored[field])
+            incoming = model_field.to_python(getattr(self, field))
             if incoming in ("", None) and held not in ("", None):
                 setattr(
                     self, field, held

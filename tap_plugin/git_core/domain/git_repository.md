@@ -26,6 +26,18 @@ Deliberately **not** covered:
 - **Forks and networks.** A fork is another repository; the relation between them is the forge's to assert.
 - **Content.** No trees, no blobs, no history; refs and stored commits are the observed edges of it.
 
+## Authoritative Source
+
+- **Source:** Git — the reference and object model (`git-check-ref-format`, `gitglossary`: ref, commit object, annotated tag object, peeling)
+- **Version:** Git 2.51 documentation (the object model has been stable since Git 1.x; SHA-256 object format per `gitformat-hash`)
+- **Retrieved:** 2026-09-08
+
+## Prior Art
+
+- unified-systems-com/tap-plugin-github-core#76 rev 2 (2026-09-08) — the extraction rulings: identities, observation semantics, shared-write rules, edge names.
+- `tap-plugin-github-core/specs/spec-github-core-vocabulary.md` — the concept rows this vocabulary was extracted from (`github_repository`, `git_ref`, `git_commit`, decision 2 on one ref type).
+- Codex review of #76 (2026-09-08, off-issue) — ship the three neutral nodes together; ref identity from repository identity + full path; commit-observation identity concrete; no `TARGETS_OBJECT`.
+
 ## Neutrality
 
 **Neutral.** The kernel fixture populates it from a synthetic source with no forge in the loop.
@@ -33,3 +45,13 @@ Deliberately **not** covered:
 ## Observability
 
 Every field is what the observing source reported at collection; `default_ref` is `""` when the source did not say.
+
+## Fields
+
+- `forge` — the host instance this repository lives on (`github.com`, `gitlab.example.org`, a synthetic source's name): half the identity.
+- `stable_id` — that host's IMMUTABLE identifier for the repository (GitHub's numeric `id`, as a string): the other half. A rename never changes it.
+- `name` — the display name as the host shows it today; mutable, never part of the identity.
+- `default_ref` — the full path of the default ref (`refs/heads/main`); `""` when the source did not say.
+- `hash_algorithm` — `sha1` or `sha256`: the object-id format this repository's commits use.
+- `configuration` — JSONB residue for what a source returns that is not lifted into a column.
+- `tags` — TAP's own tag map, uniform across every model.
