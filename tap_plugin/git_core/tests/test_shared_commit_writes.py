@@ -200,3 +200,36 @@ class TestOneCommitManyHosts:
             Entity.objects.filter(entity_type="git_core__git_ref", name="main").count()
             == 2
         )
+
+
+@pytest.mark.django_db
+@pytest.mark.spec("req-git-core-commit-2")
+def test_re_observing_the_same_commit_with_the_same_iso_dates_is_not_a_conflict() -> (
+    None
+):
+    """The first live re-collection (2026-09-08) tripped the conflict rule on a date that had been
+    stored as an aware datetime and arrived again as the same ISO string. Same fact, no conflict.
+    """
+    actor = make_admin_user("kernel-importer")
+    assert grift_import(
+        build_document(), dangling_edge_mode="strict", actor=actor
+    ).success
+    again = grift_import(
+        _second_source(
+            "again",
+            commit_overrides={
+                "authored_date": "2026-01-01T09:00:00Z",
+                "committed_date": "2026-01-01T09:00:00Z",
+            },
+        ),
+        dangling_edge_mode="strict",
+        actor=actor,
+    )
+    assert again.success, again.errors
+    from tap_grid.services import patch_node
+
+    result = patch_node(
+        str(git_commit_id("sha1", commit_oid("c1"))),
+        {"authored_date": "2026-01-01T09:00:00Z"},
+    )
+    assert result.success, result.errors
