@@ -1,5 +1,6 @@
 manifest_version = "0"
 plugin_version = "0.1.0"
+requires_tap = ">=0.1.5"
 slug = "git_core"
 name = "Git Core"
 description = "The neutral Git vocabulary — repositories, refs and commits with identities any source can mint; forges observe it, never own it."
@@ -21,3 +22,8 @@ git_core__git_commit = "tap_plugin.git_core.models.git_commit.Commit"
 DECLARES_REF__git_core = "edges/DECLARES_REF.edge.json"
 RESOLVES_COMMIT__git_core = "edges/RESOLVES_COMMIT.edge.json"
 STORES_COMMIT__git_core = "edges/STORES_COMMIT.edge.json"
+
+[[boot.records]]
+name = "ci"
+description = "RESERVED NAME (req-boot-bootstrap-ci-record): the stack this plugin's own tests run in — depends_on closure + self, offline, credential-free. The consumer flips self to editable."
+sha256 = "a06e6939fd04e97f7657cbcf8121df464ad9609439fde03140c6962a2d655c52"
