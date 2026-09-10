@@ -1,5 +1,6 @@
 manifest_version = "0"
 plugin_version = "0.1.0"
+requires_tap = ">=0.1.5"
 slug = "git_core"
 name = "Git Core"
 description = "The neutral Git vocabulary — repositories, refs and commits with identities any source can mint; forges observe it, never own it."
