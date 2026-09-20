@@ -361,7 +361,7 @@ describing a key nothing declares.
 
 | ACID | Title | Status | Description | Notes |
 | --- | --- | :---: | --- | --- |
-| req-git-core-dimensions-1 | `git.object` Is Gone | Implemented | `grep -rn "git\.object" tap_plugin/git_core` is empty (this spec names it only as history); every model's `DEFAULT_DIMENSIONS` and every edge definition's `default_dimensions` is `{}`; no article describes the key. | Model tests assert `dimensions == {}` on a service-layer create. |
+| req-git-core-dimensions-1 | `git.object` Is Gone | Implemented | Every model's `DEFAULT_DIMENSIONS` and every edge definition's `default_dimensions` is `{}`, asserted directly by `test_no_type_or_edge_declares_a_static_dimension`; a service-layer create of each of the three types yields `dimensions == {}`; `domain/dimensions/` holds no article for the key. The name still appears in prose — this requirement, three edge articles and a test docstring — recording that it was removed and why; a grep for the string is therefore NOT the test, which is the point (presence is not correctness). | |
 | req-git-core-dimensions-2 | No Forge Key | Implemented | `grep -r "github\." tap_plugin/git_core/models tap_plugin/git_core/edges` is empty. | |
 | req-git-core-dimensions-3 | Host Carried, Not Retyped | Proposed | A repository and a ref minted by a forge plugin each carry `git.host` equal to the instance their repository's `forge` field holds (a commit is deferred to `git-core-tap#14`); the value is read from that field rather than passed independently; a search for every Git concept on one instance returns exactly the nodes of that instance. | The writer is github_core (`tap-plugin-github-core#168`); observed there, not here. |
 
