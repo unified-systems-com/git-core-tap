@@ -295,8 +295,8 @@ stamps `git.host` yet**: the writers are the forge plugins, and github_core's pa
 
 #### Open question: a commit is global, `git.host` is scalar
 
-Raised by the Codex seat on PR# 13 and **not answered here** — filed as `git-core-tap#14`, scoped as
-"resolve the question". A commit's identity is `(hash_algorithm, oid)`, global: one node however many
+Found while landing `git-core-tap#11` and **not answered here** — filed as `git-core-tap#14`, scoped
+as "resolve the question", where the provenance is linked rather than asserted. A commit's identity is `(hash_algorithm, oid)`, global: one node however many
 hosts observed it (`req-git-core-commit`), with membership expressed by a `STORES_COMMIT` edge per
 repository. `Entity.dimensions` is `dict[str, str]` — one scalar value per key, merged once at create
 (`tap_grid/models.py`) — so a commit present in a GitHub repository and its GitLab mirror has two
