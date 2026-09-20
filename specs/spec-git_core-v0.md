@@ -270,8 +270,9 @@ One neutral partition key, **`git.host`** — the forge instance a row lives on.
 **Derived, not authored.** The repository model already carries the instance in `forge`, and
 identity itself rests on it (`req-git-core-identity`: a GitHub repository and its GitLab mirror never
 merge). The dimension must be **read from that field**, not passed alongside it, or it is the same
-fact in two places — the derive-a-fact-once rule applied to a declaration. Refs, commits and edges
-have no such field, but they hang off a repository whose host the writer already knows.
+fact in two places — the derive-a-fact-once rule applied to a declaration. Refs and edges have no
+such field, but each hangs off exactly one repository whose host the writer already knows. A commit
+hangs off however many repositories observed it, which is the open question below.
 
 **No static default.** `DEFAULT_DIMENSIONS` on all three models and `default_dimensions` in all three
 `.edge.json` files are therefore **empty**. A class-level constant is one value for every row of the
