@@ -150,8 +150,8 @@ Status: `Implemented`
 `signed_by_github`, no `signature_*`. Those move to github_core's `commit_observation` node
 (`req-git-core-consumers`). Identity `(hash_algorithm, oid)` — global; membership is
 `STORES_COMMIT` from the repository, meaning *observed present*, never complete history.
-`DEFAULT_DIMENSIONS` is empty; a commit carries `git.host` for the repository it was observed in
-(`req-git-core-dimensions`).
+`DEFAULT_DIMENSIONS` is empty; what a commit carries for `git.host` is the one open question in
+`req-git-core-dimensions` (`git-core-tap#14`), because a commit is global and the key is scalar.
 
 **Shared-write rules** (ruling 0.3): with global identity there are multiple writers. (a) A write
 carrying a blank for a field the node already holds keeps the held value — the service layer's
@@ -265,7 +265,7 @@ One neutral partition key, **`git.host`** — the forge instance a row lives on.
 
 | Key | Example values | Set by | Derived from |
 | --- | --- | --- | --- |
-| `git.host` | `github.com`, `gitlab.example.org`, `kernel.example` | the plugin writing the row | `GitRepository.forge` for a repository; the repository it hangs off for a ref, a commit or an edge |
+| `git.host` | `github.com`, `gitlab.example.org`, `kernel.example` | the plugin writing the row | `GitRepository.forge` for a repository; the repository it hangs off for a ref or an edge; **a commit is the open question below** |
 
 **Derived, not authored.** The repository model already carries the instance in `forge`, and
 identity itself rests on it (`req-git-core-identity`: a GitHub repository and its GitLab mirror never
@@ -291,6 +291,19 @@ git_core's half — dropping `git.object` and defining the key — is this repos
 stamps `git.host` yet**: the writers are the forge plugins, and github_core's pass is
 `tap-plugin-github-core#168`. The requirement moves to `Implemented` when a writer lands, and to
 `Verified` when `req-git-core-dimensions-3` is observed on a grid.
+
+#### Open question: a commit is global, `git.host` is scalar
+
+Raised by the Codex seat on PR# 13 and **not answered here** — filed as `git-core-tap#14`, scoped as
+"resolve the question". A commit's identity is `(hash_algorithm, oid)`, global: one node however many
+hosts observed it (`req-git-core-commit`), with membership expressed by a `STORES_COMMIT` edge per
+repository. `Entity.dimensions` is `dict[str, str]` — one scalar value per key, merged once at create
+(`tap_grid/models.py`) — so a commit present in a GitHub repository and its GitLab mirror has two
+answers and one slot. Refs and edges are unaffected: each belongs to exactly one repository.
+
+Until that is ruled, `req-git-core-dimensions-3` is normative for **repositories and refs**; what a
+multi-host commit carries is open. Nothing stamps the key yet, so nothing is wrong on a grid today —
+this is a contract to settle before the writer lands, not a defect to repair.
 
 #### What `git.object` was, and why it is gone
 
@@ -349,7 +362,7 @@ describing a key nothing declares.
 | --- | --- | :---: | --- | --- |
 | req-git-core-dimensions-1 | `git.object` Is Gone | Implemented | `grep -rn "git\.object" tap_plugin/git_core` is empty (this spec names it only as history); every model's `DEFAULT_DIMENSIONS` and every edge definition's `default_dimensions` is `{}`; no article describes the key. | Model tests assert `dimensions == {}` on a service-layer create. |
 | req-git-core-dimensions-2 | No Forge Key | Implemented | `grep -r "github\." tap_plugin/git_core/models tap_plugin/git_core/edges` is empty. | |
-| req-git-core-dimensions-3 | Host Carried, Not Retyped | Proposed | A repository, ref and commit minted by a forge plugin each carry `git.host` equal to the instance their repository's `forge` field holds; the value is read from that field rather than passed independently; a search for every Git concept on one instance returns exactly the nodes of that instance. | The writer is github_core (`tap-plugin-github-core#168`); observed there, not here. |
+| req-git-core-dimensions-3 | Host Carried, Not Retyped | Proposed | A repository and a ref minted by a forge plugin each carry `git.host` equal to the instance their repository's `forge` field holds (a commit is deferred to `git-core-tap#14`); the value is read from that field rather than passed independently; a search for every Git concept on one instance returns exactly the nodes of that instance. | The writer is github_core (`tap-plugin-github-core#168`); observed there, not here. |
 
 ### Icons
 ----
