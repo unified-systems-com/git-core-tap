@@ -8,7 +8,5 @@
   "targets": [
     "git_core__git_commit"
   ],
-  "default_dimensions": {
-    "git.object": "relation"
-  }
+  "default_dimensions": {}
 }

@@ -20,7 +20,9 @@ it. This package owns it and imports no forge.
 - **Identity helpers** — `tap_plugin.git_core.identity`: the one derivation of every id.
 - **The kernel fixture** — `fixtures/kernel.py` + `kernel.grift.json`: a synthetic non-forge
   repository that populates the whole vocabulary through the identity helpers alone.
-- **Dimension** — `git.object` ∈ repository | ref | commit | relation; nothing names a host.
+- **Dimension** — one key, `git.host`: the forge instance a row lives on, derived from the
+  repository's `forge` field and stamped by whoever writes the row, never a class-level default.
+  No account key — an account is a forge concept, not a Git one (`req-git-core-dimensions`).
 
 ## What lives elsewhere
 
@@ -32,7 +34,7 @@ it. This package owns it and imports no forge.
 ## Read first
 
 - `specs/spec-git_core-v0.md` — the contract, one requirement per node, edge and rule.
-- `tap_plugin/git_core/domain/*.md` — one article per type, edge and dimension.
+- `tap_plugin/git_core/domain/*.md` — one article per type and edge.
 - The extraction epic: unified-systems-com/tap-plugin-github-core#76.
 
 ## Install and validate

@@ -46,5 +46,8 @@ Emitted when both endpoints were observed by the same source; absent means unobs
 
 - **Source:** `git_core__git_repository`
 - **Target:** `git_core__git_ref`
-- **Dimensions:** `git.object: relation`.
+- **Dimensions:** none by default. git_core's partition key is `git.host`
+  (`req-git-core-dimensions`), the forge instance the endpoints live on; it is derived per row
+  from the repository's `forge` field and stamped by the writer, so there is nothing static to
+  declare here. The former `git.object: relation` was deleted: it restated the edge type.
 - **Properties:** none.

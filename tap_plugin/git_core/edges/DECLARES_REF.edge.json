@@ -8,7 +8,5 @@
   "targets": [
     "git_core__git_ref"
   ],
-  "default_dimensions": {
-    "git.object": "relation"
-  }
+  "default_dimensions": {}
 }
