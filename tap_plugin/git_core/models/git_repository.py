@@ -26,7 +26,10 @@ class Repository(BaseModel):
         "A Git repository, identified by its host and the host's immutable id — never by its name."
     )
     ENTITY_ICON: ClassVar[str] = "git-repository"
-    DEFAULT_DIMENSIONS: ClassVar[dict[str, str]] = {"git.object": "repository"}
+    # No static default: git_core's partition key is `git.host` (req-git-core-dimensions),
+    # the forge instance, which is per-row and derived from the repository's `forge` field —
+    # a class-level constant could only hold a wrong answer. The writer stamps it.
+    DEFAULT_DIMENSIONS: ClassVar[dict[str, str]] = {}
     DEFAULT_DISPLAY: ClassVar[dict[str, Any]] = {
         "tap_viz": {
             "shape": "round-rectangle",

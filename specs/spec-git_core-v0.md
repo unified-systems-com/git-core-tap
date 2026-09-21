@@ -6,7 +6,7 @@
 - **Display name:** Git Core
 - **Description:** The neutral Git vocabulary — repositories, refs and commits with identities any source can mint; forges observe it, never own it.
 - **Repository:** `unified-systems-com/git-core-tap` (new; identity is repo-independent)
-- **Default dimensions:** one key, `git.object` — `repository` | `ref` | `commit` on nodes, `relation` on edges (`req-git-core-dimensions`)
+- **Default dimensions:** none declared statically; one key, `git.host` — the forge instance a row lives on, derived from `GitRepository.forge` and stamped by the writer (`req-git-core-dimensions`)
 - **Icon keys:** `git-repository`, `git-ref`, `git-commit` (`req-git-core-icons`)
 - **Initial page route:** none — a vocabulary substrate, no pages or panels in v0
 - **Initial panel types:** none
@@ -54,12 +54,12 @@ principals and credential grants (identity_core); network-level commit-observati
 | --- | --- | :---: | --- |
 | req-git-core-identity | [Identity Helpers](#identity-helpers) | Implemented | `tap_plugin.git_core.identity`: repository / ref / commit ids; namespace `git_core.tap`; the ONE derivation every emitter uses. Built 2026-09-08 |
 | req-git-core-repository | [git_repository](#git_repository) | Implemented | Host-independent, name-independent identity; the neutral node hosting records link to |
-| req-git-core-ref | [git_ref](#git_ref) | Implemented | Moved from github_core with its contract intact; key = repository identity + full ref path; neutral dimensions |
+| req-git-core-ref | [git_ref](#git_ref) | Implemented | Moved from github_core with its contract intact; key = repository identity + full ref path; no forge fields |
 | req-git-core-commit | [git_commit](#git_commit) | Implemented | Intrinsic metadata only; identity `(hash_algorithm, oid)`; shared-write rules |
 | req-git-core-edges | [Edges](#edges) | Implemented | `DECLARES_REF`, `RESOLVES_COMMIT`, `STORES_COMMIT` |
 | req-git-core-kernel-fixture | [Synthetic Second-Source Fixture](#synthetic-second-source-fixture) | Implemented | A non-forge emitter populating all three types + edges through git_core's helpers; the vocabulary spec's kernel test made concrete |
 | req-git-core-consumers | [Consumer Contract](#consumer-contract) | Proposed | What github_core and git-serious must change to consume; owned here as the contract, executed there |
-| req-git-core-dimensions | [Dimensions](#dimensions) | Implemented | One neutral partition key, `git.object`, on every node and edge; defined in `domain/dimensions/git.object.md` |
+| req-git-core-dimensions | [Dimensions](#dimensions) | In Development | One neutral partition key, `git.host` — the forge instance, derived from `GitRepository.forge`. `git.object` dropped: it duplicated the entity type. Stamping is the forge plugin's half (tap-plugin-github-core#168) |
 | req-git-core-icons | [Icons](#icons) | Implemented | Three currentColor glyphs: `git-ref` and `git-commit` move from github_core, `git-repository` is drawn |
 | req-git-core-nongoals | [v0 Non-Goals](#v0-non-goals) | Implemented | The exclusions, stated |
 
@@ -99,8 +99,9 @@ Status: `Implemented`
 `git_core__git_repository`: a particular repository, identity independent of its mutable display
 name (`req-git-core-identity`). Fields: `forge` (host instance), `stable_id` (the host's immutable
 id, string), `name` (display, mutable), `default_ref` (full path, e.g. `refs/heads/main`),
-`hash_algorithm` (`sha1` default), `configuration`, `tags`. Default dimensions are
-`{"git.object": "repository"}` (`req-git-core-dimensions`), never `github.*`. A forge's hosting record (github_core's
+`hash_algorithm` (`sha1` default), `configuration`, `tags`. `DEFAULT_DIMENSIONS` is empty: the one
+partition key is `git.host`, read from this model's own `forge` field at write time
+(`req-git-core-dimensions`), never `github.*`. A forge's hosting record (github_core's
 `github_repository`, kept there) links to it with a forge-owned `HOSTS_REPOSITORY` edge; generic
 consumers traverse from the neutral node, forge views still reach the hosting facts.
 
@@ -121,8 +122,9 @@ Status: `Implemented`
 whole: `ref` (full path — identity), `ref_type` ∈ branch | tag, `name` (short), `head_sha` (the
 peeled commit), `target_sha` / `target_type` (the direct target when it differs — annotated tags),
 `is_default`, `configuration`, `tags`. **Dropped:** `full_name` (GitHub's `owner/repo`; the
-repository is the `DECLARES_REF` source and the identity input). **Changed:** default dimensions are
-`{"git.object": "ref"}`. Movement remains field history on `head_sha`. Branch and tag stay one type (vocabulary
+repository is the `DECLARES_REF` source and the identity input), and `DEFAULT_DIMENSIONS`: a ref
+carries `git.host` taken from the repository it hangs off (`req-git-core-dimensions`), which no
+class-level constant can hold. Movement remains field history on `head_sha`. Branch and tag stay one type (vocabulary
 decision 2, 2026-08-27). Model classes are the plain nouns `Repository` / `Ref` / `Commit` (module
 `tap_plugin.git_core.models`): the entity spine's reverse accessor derives from the class name, so
 `GitRef` here would clash with github_core's `GitRef` while the two coexist through the transition.
@@ -147,7 +149,9 @@ Status: `Implemented`
 `committer_name`, `committer_email`. **Nothing observed by a forge**: no `*_login`, no
 `signed_by_github`, no `signature_*`. Those move to github_core's `commit_observation` node
 (`req-git-core-consumers`). Identity `(hash_algorithm, oid)` — global; membership is
-`STORES_COMMIT` from the repository, meaning *observed present*, never complete history. Default dimensions are `{"git.object": "commit"}`.
+`STORES_COMMIT` from the repository, meaning *observed present*, never complete history.
+`DEFAULT_DIMENSIONS` is empty; what a commit carries for `git.host` is the one open question in
+`req-git-core-dimensions` (`git-core-tap#14`), because a commit is global and the key is scalar.
 
 **Shared-write rules** (ruling 0.3): with global identity there are multiple writers. (a) A write
 carrying a blank for a field the node already holds keeps the held value — the service layer's
@@ -183,8 +187,10 @@ Status: `Implemented`
   naming rule wants a mechanical verb, and the mechanism is the object store holding the object). Emitted for every commit a
   source observed in that repository; absence means unobserved, never absent.
 
-All three carry `{"git.object": "relation"}` as default dimensions and `.edge.json` definitions with
-the same shape as github_core's (slug `<NAME>__git_core`, `sources`, `targets`, `default_dimensions`).
+All three have `.edge.json` definitions of the same shape as github_core's (slug
+`<NAME>__git_core`, `sources`, `targets`, `default_dimensions`), with `default_dimensions` empty:
+`git.object: relation` was deleted because it restated the edge type, and `git.host` is derived per
+row from the endpoints' repository (`req-git-core-dimensions`).
 
 #### Acceptance Criteria
 
@@ -252,20 +258,112 @@ definition of done (github-core#76 steps 3–5):
 ----
 RID: `req-git-core-dimensions`
 
-Status: `Implemented`
+Status: `In Development`
 
-One neutral partition key, `git.object`, defined in `domain/dimensions/git.object.md` the way
-github_core defines its `github.*` keys. Values: `repository`, `ref`, `commit` on the three nodes;
-`relation` on the three edges. It answers "which Git object kind is this row" for a scoped query
-without naming any forge — the forge is a property of the observer's nodes (github_core's hosting
-record and `commit_observation`), never of the substrate. Nothing here carries `github.*`.
+One neutral partition key, **`git.host`** — the forge instance a row lives on. Ruled on
+`git-core-tap#11` (2026-09-20), replacing `git.object`.
+
+| Key | Example values | Set by | Derived from |
+| --- | --- | --- | --- |
+| `git.host` | `github.com`, `gitlab.example.org`, `kernel.example` | the plugin writing the row | `GitRepository.forge` for a repository; the repository it hangs off for a ref or an edge; **a commit is the open question below** |
+
+**Derived, not authored.** The repository model already carries the instance in `forge`, and
+identity itself rests on it (`req-git-core-identity`: a GitHub repository and its GitLab mirror never
+merge). The dimension must be **read from that field**, not passed alongside it, or it is the same
+fact in two places — the derive-a-fact-once rule applied to a declaration. Refs and edges have no
+such field, but each hangs off exactly one repository whose host the writer already knows. A commit
+hangs off however many repositories observed it, which is the open question below.
+
+**No static default.** `DEFAULT_DIMENSIONS` on all three models and `default_dimensions` in all three
+`.edge.json` files are therefore **empty**. A class-level constant is one value for every row of the
+type, and the host is per row, so a default here could only ever hold a wrong answer.
+
+**The prefix names the vocabulary, not the plugin.** A future GitLab plugin stamps `git.host` too,
+because it is writing git_core's vocabulary onto git_core's nodes — the key stays neutral across
+forges while being namespaced against any other domain with a notion of a host. A bare `host` would
+collide the moment anything else recorded one. github_core does the same on **its own** records
+(retiring `github.platform`, which held a host under a vendor's name), so "every node on
+`ghe.acme.com`" is one filter across both layers rather than a union of two spellings
+(`tap-plugin-github-core#168`).
+
+#### Status Details
+
+git_core's half — dropping `git.object` and defining the key — is this repository's change. **Nothing
+stamps `git.host` yet**: the writers are the forge plugins, and github_core's pass is
+`tap-plugin-github-core#168`. The requirement moves to `Implemented` when a writer lands, and to
+`Verified` when `req-git-core-dimensions-3` is observed on a grid.
+
+#### Open question: a commit is global, `git.host` is scalar
+
+Found while landing `git-core-tap#11` and **not answered here** — filed as `git-core-tap#14`, scoped
+as "resolve the question", where the provenance is linked rather than asserted. A commit's identity is `(hash_algorithm, oid)`, global: one node however many
+hosts observed it (`req-git-core-commit`), with membership expressed by a `STORES_COMMIT` edge per
+repository. `Entity.dimensions` is `dict[str, str]` — one scalar value per key, merged once at create
+(`tap_grid/models.py`) — so a commit present in a GitHub repository and its GitLab mirror has two
+answers and one slot. Refs and edges are unaffected: each belongs to exactly one repository.
+
+Until that is ruled, `req-git-core-dimensions-3` is normative for **repositories and refs**; what a
+multi-host commit carries is open. Nothing stamps the key yet, so nothing is wrong on a grid today —
+this is a contract to settle before the writer lands, not a defect to repair.
+
+#### What `git.object` was, and why it is gone
+
+`git.object` declared `repository` | `ref` | `commit` on the nodes and `relation` on the edges. It was
+an **exact duplicate of the entity type**: `git.object: repository` said nothing
+`git_core__git_repository` does not already say, and the grid filters by type. Three things made it
+worse than merely redundant:
+
+- **Nothing read it.** Across git_core, github_core and zizmor, every reference outside the
+  declarations was a test asserting it was set, or github_core restating the same value at write
+  time. No query, no panel, no code path consumed it.
+- **It was set twice**, so the copies could diverge.
+- **`relation` was drift already** — a value github_core invented for edges (`_GIT_RELATION_DIMENSIONS`)
+  and git_core then carried in its edge definitions, which is what a redundant declaration always
+  eventually does.
+
+The intent behind it was right: a partition key. The key chosen partitioned by **type**, which the
+entity type already does. `git.host` is the partition the plugin actually has.
+
+#### Explicitly not an account key
+
+Considered and **rejected**, 2026-09-20 — stated here so it is not re-opened. **An account is not a
+Git concept.** Git has repositories, refs, commits, objects and remotes; authors and committers are
+strings on a commit, not entities. Git has no notion of an account owning anything — a bare
+repository at a path on a server has a location and no owner. The moment you say "account" you have
+said GitHub organisation, or GitLab group, or Bitbucket workspace, and that is the forge talking. It
+already exists correctly as `github.owner` on the forge's own records.
+
+**The cost, stated rather than discovered later:** "every Git thing belonging to `acme`, across
+forges" is no longer a single filter. It goes through the forge records — find that forge's
+account-owned repositories, follow the hosting edge to the neutral nodes. That works, but the caller
+must know each forge's owner key, so the cross-forge organisation question stays awkward until the
+forge plugins agree one among themselves. That is the correct trade: modelling a forge concept as a
+Git one is how a neutral vocabulary rots.
+
+#### No dimension node, and no dimension article, in this change
+
+core has a `dimension` node type and `dcom` ships its axis as a GRIFT pack (`req-dcom-pack`).
+git_core does **not** follow it here: it declares no `[grift]` surface at all (its one GRIFT document
+is a test fixture under `fixtures/`, never seeded), and `git.host` is a single key whose values are
+open-ended host instances rather than `dcom`'s closed three-value axis — so the pack would be one
+node, and standing up a seeding surface to carry it is a decision of its own, not a detail of this
+one. Deferred, with this paragraph as the record of why.
+
+`domain/dimensions/git.object.md` is **deleted** rather than renamed for the same mechanical reason:
+the domain-article scanner discovers dimension subjects from static declarations
+(`DEFAULT_DIMENSIONS`, `default_dimensions`), and a key that is only ever stamped at write time has
+no declaration site, so an article for it is an orphan by that scanner's definition. The key's
+definition therefore lives in this requirement. That the article layer has no home for a derived
+dimension key is a gap in the scanner, filed against tap, not a reason to leave a stale article
+describing a key nothing declares.
 
 #### Acceptance Criteria
 
 | ACID | Title | Status | Description | Notes |
 | --- | --- | :---: | --- | --- |
-| req-git-core-dimensions-1 | Every Type Declares It | Implemented | Each model's `DEFAULT_DIMENSIONS` is exactly `{"git.object": <kind>}`; each edge definition's `default_dimensions` is `{"git.object": "relation"}`; the dimension article exists and names the four values. | Dimension test per model, as github_core's. |
+| req-git-core-dimensions-1 | `git.object` Is Gone | Implemented | Every model's `DEFAULT_DIMENSIONS` and every edge definition's `default_dimensions` is `{}`, asserted directly by `test_no_type_or_edge_declares_a_static_dimension`; a service-layer create of each of the three types yields `dimensions == {}`; `domain/dimensions/` holds no article for the key. The name still appears in prose — this requirement, three edge articles and a test docstring — recording that it was removed and why; a grep for the string is therefore NOT the test, which is the point (presence is not correctness). | |
 | req-git-core-dimensions-2 | No Forge Key | Implemented | `grep -r "github\." tap_plugin/git_core/models tap_plugin/git_core/edges` is empty. | |
+| req-git-core-dimensions-3 | Host Carried, Not Retyped | Proposed | A repository and a ref minted by a forge plugin each carry `git.host` equal to the instance their repository's `forge` field holds (a commit is deferred to `git-core-tap#14`); the value is read from that field rather than passed independently; a search for every Git concept on one instance returns exactly the nodes of that instance. | The writer is github_core (`tap-plugin-github-core#168`); observed there, not here. |
 
 ### Icons
 ----

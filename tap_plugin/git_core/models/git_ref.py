@@ -30,7 +30,10 @@ class Ref(BaseModel):
         "signal; movement of a branch is routine."
     )
     ENTITY_ICON: ClassVar[str] = "git-ref"
-    DEFAULT_DIMENSIONS: ClassVar[dict[str, str]] = {"git.object": "ref"}
+    # No static default: git_core's partition key is `git.host` (req-git-core-dimensions),
+    # the forge instance, which is per-row and derived from the repository's `forge` field —
+    # a class-level constant could only hold a wrong answer. The writer stamps it.
+    DEFAULT_DIMENSIONS: ClassVar[dict[str, str]] = {}
     DEFAULT_DISPLAY: ClassVar[dict[str, Any]] = {
         "tap_viz": {
             "shape": "round-rectangle",
