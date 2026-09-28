@@ -26,4 +26,4 @@ STORES_COMMIT__git_core = "edges/STORES_COMMIT.edge.json"
 [[boot.records]]
 name = "ci"
 description = "RESERVED NAME (req-boot-bootstrap-ci-record): the stack this plugin's own tests run in — depends_on closure + self, offline, credential-free. The consumer flips self to editable."
-sha256 = "9ad2b7c2684a13c93ef245f81306b8691f1464cb6b5dfbb0696264a2d4b24019"
+sha256 = "878f098cac66762d819a410f21395d040493de52bfbfd72a986adbd2f67bf917"
