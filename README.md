@@ -35,7 +35,7 @@ it. This package owns it and imports no forge.
 
 - `specs/spec-git_core-v0.md` — the contract, one requirement per node, edge and rule.
 - `tap_plugin/git_core/domain/*.md` — one article per type and edge.
-- The extraction epic: unified-systems-com/tap-plugin-github-core#76.
+- The extraction epic: unified-systems-com/github-core-tap#76.
 
 ## Install and validate
 
