@@ -1,0 +1,38 @@
+{
+  "metadata": {
+    "grift_version": "0"
+  },
+  "_reserved": {},
+  "batches": [
+    {
+      "batch_entity": {
+        "entity_id": "01a1d10a-eb22-7742-a0c1-59896789ab27",
+        "entity_type": "batch",
+        "name": "Git core dimensions v0.1.0",
+        "dimensions": {}
+      },
+      "batch_node": {
+        "source": "plugins.git_core",
+        "name": "Git core dimensions v0.1.0",
+        "description": "Dimension nodes for every dimension key the git_core plugin declares, so each key has a declared node before the dimension map moves to keying by node id (tap#708, tap#711)."
+      },
+      "nodes": [
+        {
+          "entity": {
+            "entity_id": "01a1d10a-eb22-7742-a0c1-5988c9d08db4",
+            "entity_type": "dimension",
+            "name": "git.host",
+            "dimensions": {
+              "tap.meta": "dimension"
+            }
+          },
+          "node": {
+            "name": "git.host",
+            "description": "The forge instance a row lives on: github.com, a GitHub Enterprise Server host, or any other forge's hostname. The neutral tenancy partition for git_core, stamped by the forge plugins that write git_core rows (req-git-core-dimensions)."
+          }
+        }
+      ],
+      "edges": []
+    }
+  ]
+}
