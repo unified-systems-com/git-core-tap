@@ -11,6 +11,12 @@ whose spine ``entity_type`` is ``edge``, whose ``tap_edge.edge_type`` ends ``__g
 key. It removes only that key and leaves every other dimension as it was. Run twice, it changes nothing the second
 time. It runs on the name-keyed map, before core's reshape; on a map already keyed by node id it matches no row.
 
+Upgrade order: install and migrate this git_core release while the grid is still on a core that predates the
+reshape, then upgrade core. That is the order core's own migration states for plugin key changes ("plugin releases
+first"). It is not encoded as ``run_before`` on core's migration, on purpose: that would make this migration a
+dependency of one that grids already on the new core have applied, and Django refuses to migrate a database whose
+applied migration has an unapplied dependency. On such a grid this migration finds nothing to do anyway.
+
 Nothing is lost: the value was the row's type (``repository``, ``ref``, ``commit``, ``relation``), which the row
 still states. Reversing is a no-op.
 """
