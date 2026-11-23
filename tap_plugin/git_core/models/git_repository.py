@@ -6,6 +6,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from tap_plugin.git_core.identity import HASH_ALGORITHMS
 
+from tap_grid.event_time import NO_EVENT_TIME
 from tap_grid.models import BaseModel
 
 
@@ -26,6 +27,8 @@ class Repository(BaseModel):
         "A Git repository, identified by its host and the host's immutable id — never by its name."
     )
     ENTITY_ICON: ClassVar[str] = "git-repository"
+    # Git records no creation time for a repository; a forge's creation date lives on its hosting record.
+    EVENT_TIME = NO_EVENT_TIME
     # No static default: git_core's partition key is `git.host` (req-git-core-dimensions),
     # the forge instance, which is per-row and derived from the repository's `forge` field —
     # a class-level constant could only hold a wrong answer. The writer stamps it.
