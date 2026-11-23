@@ -6,6 +6,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from tap_plugin.git_core.identity import HASH_ALGORITHMS, OID_LENGTH
 
+from tap_grid.event_time import Moment
 from tap_grid.models import BaseModel
 
 _HEX = frozenset("0123456789abcdef")
@@ -36,6 +37,9 @@ class Commit(BaseModel):
         "committer facts Git itself records. One node however many hosts observe it."
     )
     ENTITY_ICON: ClassVar[str] = "git-commit"
+    # The commit object came into being at its committer date (Git records it in the object;
+    # the author date is when the change was first written and survives a rebase). One event.
+    EVENT_TIME = Moment("committed_date", "occurred")
     # No static default: git_core's partition key is `git.host` (req-git-core-dimensions),
     # the forge instance, which is per-row and derived from the repository's `forge` field —
     # a class-level constant could only hold a wrong answer. The writer stamps it.

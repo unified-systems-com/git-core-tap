@@ -5,6 +5,7 @@ from typing import Any, ClassVar
 from django.core.exceptions import ValidationError
 from django.db import models
 
+from tap_grid.event_time import NO_EVENT_TIME
 from tap_grid.models import BaseModel
 
 _HEX = frozenset("0123456789abcdef")
@@ -30,6 +31,8 @@ class Ref(BaseModel):
         "signal; movement of a branch is routine."
     )
     ENTITY_ICON: ClassVar[str] = "git-ref"
+    # Git records no creation or move time for a ref, and no writer puts one in configuration.
+    EVENT_TIME = NO_EVENT_TIME
     # No static default: git_core's partition key is `git.host` (req-git-core-dimensions),
     # the forge instance, which is per-row and derived from the repository's `forge` field —
     # a class-level constant could only hold a wrong answer. The writer stamps it.
