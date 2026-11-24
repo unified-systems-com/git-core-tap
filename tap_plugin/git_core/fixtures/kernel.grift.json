@@ -1,6 +1,16 @@
 {
   "metadata": {
-    "grift_version": "0"
+    "grift_version": "1",
+    "spine_version": 1,
+    "type_versions": {
+      "DECLARES_REF__git_core": 1,
+      "RESOLVES_COMMIT__git_core": 1,
+      "STORES_COMMIT__git_core": 1,
+      "batch": 1,
+      "git_core__git_commit": 1,
+      "git_core__git_ref": 1,
+      "git_core__git_repository": 1
+    }
   },
   "_reserved": {},
   "batches": [

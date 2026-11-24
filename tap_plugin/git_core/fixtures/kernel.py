@@ -200,7 +200,22 @@ def build_document() -> dict[str, Any]:
 
     batch_id = uuid5(GIT_CORE_NAMESPACE, f"batch:kernel-fixture:{VERSION}")
     return {
-        "metadata": {"grift_version": "0"},
+        # Format "1" (tap v0.4.9, req-grift-header-versions): the header core's restamp_grift wrote over
+        # the format "0" document — the spine and every type it carries at 1, which is how a "0"
+        # document was always read. Stated literally so the emitter still imports nothing from core.
+        "metadata": {
+            "grift_version": "1",
+            "spine_version": 1,
+            "type_versions": {
+                "DECLARES_REF__git_core": 1,
+                "RESOLVES_COMMIT__git_core": 1,
+                "STORES_COMMIT__git_core": 1,
+                "batch": 1,
+                "git_core__git_commit": 1,
+                "git_core__git_ref": 1,
+                "git_core__git_repository": 1,
+            },
+        },
         "_reserved": {},
         "batches": [
             {
