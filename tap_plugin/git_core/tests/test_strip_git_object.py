@@ -41,9 +41,10 @@ def test_the_migration_strips_git_object_from_git_core_rows_only() -> None:
     with connection.cursor() as cursor:
         for edge, edge_type in ((our_edge, "DECLARES_REF__git_core"), (their_edge, "HOSTS_REPOSITORY__github_core")):
             cursor.execute(
-                "INSERT INTO tap_edge (batch_id, flip_map, edge_type, properties, entity_id, from_entity_id, to_entity_id)"
-                " VALUES (%s, '{}', %s, '{}', %s, %s, %s)",
-                ["test", edge_type, edge.pk, ours.pk, theirs.pk],
+                # tap v0.4.9 drops tap_edge.batch_id; the insert trigger fills the spine copies.
+                "INSERT INTO tap_edge (flip_map, edge_type, properties, entity_id, from_entity_id, to_entity_id)"
+                " VALUES ('{}', %s, '{}', %s, %s, %s)",
+                [edge_type, edge.pk, ours.pk, theirs.pk],
             )
     for _ in range(2):  # a second run changes nothing
         migration.strip_git_object(None, SimpleNamespace(connection=connection))
