@@ -1,5 +1,5 @@
 manifest_version = "0"
-plugin_version = "0.1.2" # x-release-please-version
+plugin_version = "0.1.3" # x-release-please-version
 requires_tap = ">=0.4.9"
 slug = "git_core"
 name = "Git Core"
@@ -26,7 +26,7 @@ STORES_COMMIT__git_core = "edges/STORES_COMMIT.edge.json"
 [[boot.records]]
 name = "ci"
 description = "RESERVED NAME (req-boot-bootstrap-ci-record): the stack this plugin's own tests run in — depends_on closure + self, offline, credential-free. The consumer flips self to editable."
-sha256 = "878f098cac66762d819a410f21395d040493de52bfbfd72a986adbd2f67bf917"
+sha256 = "960eb774349a3f9a4a4b1ae0e14d2d58467ea49c7650a3a37c3260d62e678902"
 
 [grift]
 dimension = "grift/dimension.grift.json"
