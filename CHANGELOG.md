@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.1.3](https://github.com/unified-systems-com/git-core-tap/compare/v0.1.2...v0.1.3) (2026-11-24)
+
+
+### Features
+
+* declare event time for every model (tap v0.4.7) ([554e811](https://github.com/unified-systems-com/git-core-tap/commit/554e811bc4d375d4332547e8dde93efd078d60db))
+* declare event time for every model (tap v0.4.7) ([6b26c0d](https://github.com/unified-systems-com/git-core-tap/commit/6b26c0d653a550629bdb75812ff9943f18d74f13))
+* tap v0.4.9 — spine copies migration, format "1" documents ([c901629](https://github.com/unified-systems-com/git-core-tap/commit/c901629ce417c2fed788dd581d8474f9cf079002))
+* tap v0.4.9 — spine copies migration, format "1" documents ([da511ea](https://github.com/unified-systems-com/git-core-tap/commit/da511ead3a06dfd77e7176be897a02a9f948848a))
+
 ## [0.1.2](https://github.com/unified-systems-com/git-core-tap/compare/v0.1.1...v0.1.2) (2026-11-16)
 
 
