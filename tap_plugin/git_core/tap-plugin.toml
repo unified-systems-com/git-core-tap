@@ -1,6 +1,6 @@
 manifest_version = "0"
 plugin_version = "0.1.3" # x-release-please-version
-requires_tap = ">=0.4.9"
+requires_tap = ">=0.5.0"  # 0004_history_event_time depends on tap_grid 0024 (core v0.5.0: event time on history rows)
 slug = "git_core"
 name = "Git Core"
 description = "The neutral Git vocabulary — repositories, refs and commits with identities any source can mint; forges observe it, never own it."
