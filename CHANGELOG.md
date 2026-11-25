@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.4](https://github.com/unified-systems-com/git-core-tap/compare/v0.1.3...v0.1.4) (2026-11-25)
+
+
+### Bug Fixes
+
+* ship the history event-time migration on the tap v0.5.0 floor ([4b1649e](https://github.com/unified-systems-com/git-core-tap/commit/4b1649e1e3d2ddc53a5cce31f0b9e25d7eadfa65))
+* ship the history event-time migration on the tap v0.5.0 floor ([e32d897](https://github.com/unified-systems-com/git-core-tap/commit/e32d89756e09082ae60a16287afb89dc53794ea4))
+
 ## [0.1.3](https://github.com/unified-systems-com/git-core-tap/compare/v0.1.2...v0.1.3) (2026-11-24)
 
 
